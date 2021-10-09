@@ -1,10 +1,14 @@
-use std::{
-    thread,
-    time::{Duration, Instant},
-    env
-};
+use std::{env, io::{stdin, Result}, thread, time::{Duration, Instant}};
 
 use autopilot::key::{Code, KeyCode};
+
+const DEFAULT_SEC_INTERVAL: u64 = 30;
+
+fn read_interval_input() -> Result<u64> {
+    let mut inp = String::new();
+    stdin().read_line(&mut inp)?;
+    Ok(inp.parse::<u64>().unwrap_or(DEFAULT_SEC_INTERVAL))
+}
 
 fn main() {
     let args = env::args().collect::<Vec<String>>();
@@ -12,8 +16,10 @@ fn main() {
     let dur = if let Some(dur) = duration_str {
         dur.parse::<u64>().unwrap()
     } else {
-        30
+        read_interval_input().unwrap()
     };
+
+    println!("Keep awake start for every {} secs", dur);
     let start_time = Instant::now();
     loop {
         thread::sleep(Duration::from_secs(dur));
