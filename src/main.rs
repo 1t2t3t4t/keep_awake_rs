@@ -1,13 +1,16 @@
-use std::{env, io::{stdin, Result}, thread, time::{Duration, Instant}};
+use std::{env, io::{Result, Write, stdin, stdout}, thread, time::{Duration, Instant}};
 
 use autopilot::key::{Code, KeyCode};
 
 const DEFAULT_SEC_INTERVAL: u64 = 30;
 
 fn read_interval_input() -> Result<u64> {
+    print!("Input awake interval in seconds (Empty will be default as 30 secs): ");
+    stdout().flush()?;
+    
     let mut inp = String::new();
     stdin().read_line(&mut inp)?;
-    Ok(inp.parse::<u64>().unwrap_or(DEFAULT_SEC_INTERVAL))
+    Ok(inp.trim_end().parse::<u64>().unwrap_or(DEFAULT_SEC_INTERVAL))
 }
 
 fn main() {
